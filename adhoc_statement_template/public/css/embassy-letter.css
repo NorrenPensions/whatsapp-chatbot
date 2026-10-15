@@ -1,0 +1,250 @@
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #111111;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.letter-page {
+  width: 210mm;
+  height: 297mm;
+  max-height: 297mm;
+  margin: 0 auto;
+  padding: 8mm 10.5mm 5mm 10.5mm;
+  position: relative;
+  background: #ffffff;
+  color: #111111;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Watermark (SVG Background Vector)
+   ========================================================================== */
+.watermark-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.watermark-container svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.watermark-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ==========================================================================
+   Header (Clean Letterhead with Bottom Border Line)
+   ========================================================================== */
+.top-header {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 38% 62%;
+  align-items: start;
+  min-height: 26mm;
+  border-bottom: 2px solid #f04b23;
+  padding-bottom: 2.5mm;
+  margin-bottom: 3.5mm;
+  background-color: transparent;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+}
+
+.brand-block .logo {
+  width: 45mm;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin-top: 2mm;
+}
+
+.text-logo {
+  display: flex;
+  align-items: center;
+}
+
+.text-logo .brand-name {
+  font-size: 18px;
+  font-weight: 700;
+  display: block;
+}
+
+.text-logo .brand-sub {
+  font-size: 12px;
+  display: block;
+}
+
+.office-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 8mm;
+  row-gap: 2.5mm;
+  font-size: 7.5px;
+  line-height: 1.25;
+  color: #111111;
+}
+
+.office-grid strong {
+  color: #f04b23;
+  font-size: 8px;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 0.5mm;
+}
+
+/* ==========================================================================
+   Letter Content Body
+   ========================================================================== */
+.letter-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 0 1mm;
+}
+
+.letter-date {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 3.5mm;
+  color: #111111;
+}
+
+.recipient-block {
+  font-size: 12px;
+  line-height: 1.38;
+  margin-bottom: 3.5mm;
+  color: #111111;
+}
+
+.salutation {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 3.5mm;
+  color: #111111;
+}
+
+.letter-subject {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #111111;
+  margin-bottom: 3.5mm;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.letter-body p {
+  margin: 0 0 2.8mm 0;
+  text-align: justify;
+  font-size: 12px;
+  line-height: 1.48;
+  color: #111111;
+}
+
+.letter-body a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.signoff-block {
+  margin-top: 3mm;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #111111;
+}
+
+.signoff-block p {
+  margin: 0 0 1.5mm 0;
+}
+
+.signature-wrapper {
+  margin: 1.5mm 0 1mm 0;
+  height: 13mm;
+  display: flex;
+  align-items: flex-end;
+}
+
+.signature-img {
+  height: 12mm;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.signatory-name {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+/* ==========================================================================
+   Footer Banner
+   ========================================================================== */
+.note-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: 2mm;
+}
+
+.footer-banner {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   Print Optimization
+   ========================================================================== */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .letter-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 8mm 10.5mm 5mm 10.5mm !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}

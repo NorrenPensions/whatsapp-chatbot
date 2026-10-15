@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Embassy Letter</title>
+  <link rel="stylesheet" href="../public/css/embassy-letter.css" />
+</head>
+<body>
+  <main class="letter-page">
+    <div class="watermark-container" aria-hidden="true">
+      {{#if watermarkSvg}}
+        {{{watermarkSvg}}}
+      {{else if watermarkUrl}}
+        <img src="{{watermarkUrl}}" alt="" />
+      {{/if}}
+    </div>
+
+    <header class="top-header">
+      <div class="brand-block">
+        {{#if logoUrl}}
+          <img src="{{logoUrl}}" alt="Norrenberger Pensions" class="logo" />
+        {{else}}
+          <div class="text-logo">
+            <span class="dot"></span>
+            <div class="logo-text">
+              <span class="brand-name">nörrenberger</span>
+              <span class="brand-sub">Pensions</span>
+            </div>
+          </div>
+        {{/if}}
+      </div>
+
+      <div class="office-grid">
+        <div><strong>Head Office</strong><br />22, Otukpo Street, Off Gimbiya Street,<br />Area 11, Garki, Abuja.</div>
+        <div><strong>Kano Office</strong><br />Ground floor, B-Centre Plaza,<br />opp. Kano State Assembly, Off Zaria Road,<br />Kano.</div>
+        <div><strong>Port Harcout Office</strong><br />8, Ohaeto Street, D-Line, Port Harcourt,<br />Rivers State</div>
+        <div><strong>Lagos Office</strong><br />2, Okotie Eboh Street, Ikoyi, Lagos.</div>
+      </div>
+    </header>
+
+    <div class="letter-content">
+      <div class="letter-date">{{letterDate}}</div>
+
+      <div class="recipient-block">
+        {{#if recipientTitle}}<div><strong>{{recipientTitle}}</strong></div>{{/if}}
+        {{#if missionName}}<div>{{missionName}}</div>{{/if}}
+        {{#if street}}<div>{{street}}</div>{{/if}}
+        {{#if area}}<div>{{area}}</div>{{/if}}
+        {{#if state}}<div>{{state}}</div>{{/if}}
+      </div>
+
+      <div class="salutation">
+        {{salutation}}
+      </div>
+
+      <div class="letter-subject">
+        CONFIRMATION OF RETIREMENT SAVINGS FOR {{clientName}} (RSA PIN: {{pin}})
+      </div>
+
+      <div class="letter-body">
+        <p>
+          We wish to confirm that the above-named client maintains a Retirement Savings Account (RSA) with Norrenberger Pensions Limited from the undernamed present employer; <strong>{{employerName}}</strong>.
+        </p>
+
+        <p>
+          As of the date of this letter, the balance in the client's Retirement Savings Account (RSA) is <strong>₦{{formattedBalance}} ({{balanceInWords}})</strong>.
+        </p>
+
+        <p>
+          Find attached the client's Retirement Savings Account statement for your perusal.
+        </p>
+
+        <p>
+          Please note that this letter is issued without prejudice to Norrenberger Pensions Limited and its employees. Accordingly, neither the Company nor its employees shall be held liable for any consequences arising from the use or reliance on the information contained in this letter.
+        </p>
+
+        <p>
+          If you require any further information or clarification, please do not hesitate to contact our Contact Centre on <strong>07002200030</strong> or <strong>08165722731</strong>, or send an email to <a href="mailto:clientservice@norrenpensions.com">clientservice@norrenpensions.com</a>.
+        </p>
+      </div>
+
+      <div class="signoff-block">
+        <p>Yours faithfully,</p>
+        <p><strong>For: Norrenberger Pensions Limited</strong></p>
+
+        <div class="signature-wrapper">
+          {{#if signatureUrl}}
+            <img src="{{signatureUrl}}" alt="Signature" class="signature-img" />
+          {{/if}}
+        </div>
+
+        <p class="signatory-name"><strong>Bilkisu Ogirima</strong><br />Head, Customer Experience</p>
+      </div>
+    </div>
+
+    <footer class="note-footer">
+      {{#if bannerUrl}}
+        <img src="{{bannerUrl}}" alt="Footer Banner" class="footer-banner" />
+      {{/if}}
+    </footer>
+  </main>
+</body>
+</html>

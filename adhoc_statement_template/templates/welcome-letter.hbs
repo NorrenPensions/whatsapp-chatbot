@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Welcome letter</title><style>{{{css}}}</style></head>
+<body><main class="letter">
+<header><img class="logo" src="{{logoUrl}}" alt="Norrenberger Pensions"><div><span>WELCOME TO NORRENBERGER PENSIONS</span><p>{{letterDate}}</p></div></header>
+<section class="recipient"><div><strong>{{fullName}}</strong><div>{{employerName}}</div>{{#each addressLines}}<div>{{this}}</div>{{/each}}<div class="phone">{{mobilePhone}}</div></div>{{#if photoUrl}}<img class="photo" src="{{photoUrl}}" alt="Customer photograph">{{/if}}</section>
+<p>Dear {{firstName}},</p>
+<h1>Certificate of Registration</h1>
+<p>Thank you for choosing Norrenberger Pensions Limited as your Pension Fund Administrator (PFA). We are pleased to advise you that we have opened a Retirement Savings Account (RSA) in your name. Please note below the details of your account:</p>
+<dl class="account"><dt>RSA PIN</dt><dd class="pin">{{pin}}</dd><dt>Employer</dt><dd>{{employerName}}</dd><dt>Employer code</dt><dd>{{employerCode}}</dd><dt>Registration date</dt><dd>{{registrationDate}}</dd><dt>Date of birth</dt><dd>{{dateOfBirth}}</dd></dl>
+<h2>Next Steps</h2><p>You are required to provide your RSA PIN as well as our Pension Fund Administrator (PFA) details to your employer for prompt remittance of your monthly contributions.</p>
+<h2>Contribution Remittance</h2><p>Your monthly pension contributions will be remitted through PenCom-approved Payment Solution Service Providers (PSSPs) and securely deposited with our Pension Fund Custodian (PFC) into your Retirement Savings Account (RSA).</p>
+<h2>Our Promise to You</h2><p>At Norrenberger Pensions, our customers are at the heart of everything we do. Guided by our Customer-First Values - Empathy, Accessibility, Accuracy, Timeliness, and Innovation - we are committed to serving you with respect, speed, and transparency, while protecting your data and making your pension journey simple and seamless.</p>
+<p>Thank you for giving us the opportunity to serve you as we look forward to a mutually beneficial relationship.</p>
+<section class="signature"><div>Yours sincerely,</div><strong>For: Norrenberger Pensions Limited</strong><img src="{{signatureUrl}}" alt="Customer Experience signature"><strong>Bilkisu A. Ogirima</strong><div>Head Customer Experience</div></section>
+<footer><div class="contacts"><div><h3>Contact Us</h3><div>Customer Service: 07002200300</div><div>Email: clientservice@norrenpensions.com</div><h3>Stay in Touch</h3><div>Instagram / Facebook / LinkedIn / TikTok:<br>@norrenbergerpensions</div><div>Twitter / X: @NorrenPensions</div></div><div><h3>Our Offices</h3><div>Head Office: No. 22 Otukpo Street, Off Gimbiya Street,<br>Area 11, Garki, Abuja. Tel: (234) 8165722731</div><div>Lagos Office: 2B Okotie-Eboh Street, off Awolowo Road,<br>Ikoyi, Lagos. Tel: (234) 8030450447</div><div>Website: www.norrenpensions.com</div>{{#if formReference}}<div>Form Ref No: {{formReference}}</div>{{/if}}</div></div><p class="regulatory">Norrenberger Pensions is a member of the Norrenberger Financial Group and is Licensed &amp; Regulated by the National Pension Commission (PenCom)</p></footer>
+</main></body></html>

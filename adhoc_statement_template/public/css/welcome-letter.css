@@ -1,0 +1,18 @@
+@page { size: A4; margin: 8mm; }
+* { box-sizing: border-box; }
+body { margin: 0; color: #25313b; font: 10.5pt/1.36 Arial, sans-serif; }
+.letter { min-height: 281mm; display: flex; flex-direction: column; border-top: 3px solid #f15b25; padding-top: 5mm; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5mm; }
+.logo { width: 47mm; height: 16mm; object-fit: contain; }
+header div { text-align: right; } header span { font-size: 7pt; letter-spacing: 1px; color: #6b737b; } header p { font-size: 10pt; margin: 2mm 0 0; }
+.recipient { display: flex; justify-content: space-between; align-items: flex-start; min-height: 29mm; margin-bottom: 3mm; gap: 8mm; }
+.recipient > div { max-width: 152mm; overflow-wrap: anywhere; }
+.recipient strong { display: block; margin-bottom: 1mm; } .phone { margin-top: 1mm; }
+.photo { width: 25mm; height: 30mm; object-fit: contain; border: 1px solid #d8dde1; padding: 1mm; }
+p { margin: 0 0 3mm; } h1 { font-size: 15pt; color: #c8481a; margin: 1mm 0 3mm; } h2 { font-size: 10.5pt; margin: 1mm 0 1mm; color: #b64419; }
+.account { display: grid; grid-template-columns: 40mm 1fr; gap: 1.4mm 3mm; background: #faf5f1; border-left: 3px solid #f15b25; padding: 3mm 4mm; margin: 1mm 0 4mm; }
+dt { color: #5b6269; } dd { margin: 0; font-weight: bold; overflow-wrap: anywhere; } .pin { color: #bc4216; letter-spacing: .5px; }
+.signature { margin: 1mm 0 3mm; } .signature strong { display: block; } .signature img { display: block; width: 26mm; height: 11mm; object-fit: contain; object-position: left; margin: 1mm 0; }
+footer { margin-top: auto; border-top: 1px solid #e05c2a; padding-top: 2mm; font-size: 7.5pt; line-height: 1.35; }
+.contacts { display: grid; grid-template-columns: 1fr 1.2fr; gap: 6mm; } .contacts h3 { font-size: 8pt; margin: 0 0 1mm; color: #b64419; } .contacts div > div { margin-bottom: 1mm; } .contacts h3:not(:first-child) { margin-top: 2mm; }
+.regulatory { text-align: center; font-size: 6.5pt; border-top: 1px solid #e5e7e9; padding-top: 2mm; margin: 2mm 0 0; }
