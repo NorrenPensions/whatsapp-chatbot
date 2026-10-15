@@ -43,6 +43,7 @@ Authorization: Basic <base64-encoded-username:password>
 |---|---|---|---|
 | `GET` | `/health` | No | Health check and service status |
 | `POST` | `/balance/my-bal` | Yes (Basic) | Retrieve member RSA balance |
+| `POST` | `/balance/my-growth` | Yes (Basic) | Retrieve member RSA total growth |
 | `POST` | `/client-details/my-pin` | Yes (Basic) | Retrieve member RSA PIN from mobile number |
 | `POST` | `/client-details/my-email` | Yes (Basic) | Retrieve member registered email |
 | `PUT` | `/client-details/update-email` | Yes (Basic) | Update member registered email |
@@ -52,6 +53,8 @@ Authorization: Basic <base64-encoded-username:password>
 | `POST` | `/statement/send-statement` | No | Generate account statement PDF and email to member |
 | `POST` | `/embassy-letter/generate-and-send` | Yes (Basic) | Generate embassy letter PDF and email to member |
 | `POST` | `/welcome-letter/generate` | Yes (Basic) | Generate welcome certificate PDF and email to member |
+| `GET` / `POST` | `/fund-prices` | No | Retrieve list of current fund prices or filter by fund code |
+| `POST` | `/benefit-status` | Yes (Basic) | Retrieve current benefit payment application status |
 
 ---
 
@@ -100,6 +103,36 @@ POST /balance/my-bal
   - `500 Internal Server Error`:
     ```json
     { "message": "An error occurred while fetching balances" }
+    ```
+---
+
+### 4.3 Retrieve Member Total Growth
+
+```http
+POST /balance/my-growth
+POST /balance/growth
+```
+
+- **Authentication:** Basic Auth
+- **Request Body:**
+  ```json
+  {
+    "mobileNumOrPin": "PEN000000000001"
+  }
+  ```
+- **Response (`200 OK`):**
+  Returns numeric total growth:
+  ```json
+  245600.75
+  ```
+- **Error Responses:**
+  - `404 Not Found`:
+    ```json
+    { "message": "The provided RSA PIN does not exist." }
+    ```
+  - `500 Internal Server Error`:
+    ```json
+    { "message": "An error occurred while fetching growth" }
     ```
 
 ---
@@ -392,6 +425,171 @@ POST /welcome-letter/generate
   - `500 Internal Server Error`: `{ "message": "An error occurred while generating or sending welcome letter" }`
 
 ---
+
+### 4.12 Retrieve Fund Prices
+
+```http
+GET /fund-prices
+POST /fund-prices
+GET /fund-prices/:fundCode
+```
+
+- **Authentication:** None
+- **Headers:**
+  ```http
+  Content-Type: application/json
+  Accept: application/json
+  ```
+- **Request Parameters / Payload (Optional):**
+  - Query parameter: `?fundCode=FUND2`
+  - URL parameter: `/fund-prices/FUND2`
+  - JSON Body (for POST):
+    ```json
+    {
+      "fundCode": "FUND2"
+    }
+    ```
+- **Response — Full List (`200 OK`):**
+  ```json
+  [
+    {
+      "fundCode": "FUND2",
+      "fundName": "NORRENBERGER RSA FUND II",
+      "fundPrice": 7.1971,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "FUND4",
+      "fundName": "NORRENBERGER RETIREE FUND IV",
+      "fundPrice": 7.2424,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "TCF",
+      "fundName": "NORRENBERGER TRANSITIONAL CONTRIBUTION FUND",
+      "fundPrice": 4.9854,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "FUND1",
+      "fundName": "RSA FUND I",
+      "fundPrice": 3.2219,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "FUND3",
+      "fundName": "RSA FUND III",
+      "fundPrice": 2.8443,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "CRA",
+      "fundName": "RSA CONTRIBUTION RECONCIILIATION FUND",
+      "fundPrice": 1.7737,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "ALLOC",
+      "fundName": "ALLOCATION ACCOUNT FUND",
+      "fundPrice": 0.0,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "FUND5",
+      "fundName": "Personal Pension Plan(PPP)",
+      "fundPrice": 1.8345,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "RLA",
+      "fundName": "RETIREE ANNUITY SUSPENSE ACCOUNT",
+      "fundPrice": 1.0061,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "FUND6",
+      "fundName": "NON-INTEREST FUND(ACTIVE FUND VI)",
+      "fundPrice": 1.8964,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": "FUND6R",
+      "fundName": "NON-INTEREST FUND (RETIREE FUND VI)",
+      "fundPrice": 1.6566,
+      "valuationDate": 1791932400000
+    },
+    {
+      "fundCode": null,
+      "fundName": "FOREIGN CURRENCY DOLLAR FUND VII",
+      "fundPrice": 0.0,
+      "valuationDate": 1791932400000
+    }
+  ]
+  ```
+- **Response — Single Fund (`200 OK`):**
+  ```json
+  {
+    "fundCode": "FUND2",
+    "fundName": "NORRENBERGER RSA FUND II",
+    "fundPrice": 7.1971,
+    "valuationDate": 1791932400000
+  }
+  ```
+- **Error Responses:**
+  - `404 Not Found`: `{ "message": "Fund with code 'INVALID' not found." }`
+  - `500 Internal Server Error`: `{ "message": "An error occurred while fetching fund prices" }`
+
+---
+
+### 4.13 Retrieve Benefit Application Status
+
+```http
+POST /benefit-status
+POST /benefit-status/status
+```
+
+- **Authentication:** Basic Auth
+- **Headers:**
+  ```http
+  Content-Type: application/json
+  Accept: application/json
+  ```
+- **Request Body:**
+  ```json
+  {
+    "mobileNumOrPin": "PEN100771157719"
+  }
+  ```
+  *(Also accepts `"rsaPin"` or `"pin"` as payload field, or standard Nigerian mobile number starting with `234`)*
+- **Response (`200 OK`):**
+  ```json
+  {
+    "data": {
+      "statusId": 16,
+      "status": "Approved for payment - payment instruction sent to Custodian",
+      "rawStatus": "Approved by Finance",
+      "benefitType": "EnBloc - Private",
+      "applicantName": "Gaddafi Balarabe",
+      "appDate": "2025-05-21T09:35:33.353Z"
+    },
+    "message": "Approved for payment - payment instruction sent to Custodian",
+    "status": 200
+  }
+  ```
+- **Status Stages Mapping:**
+  - `2`: `Application received`
+  - `4`: `Under Initial Review`
+  - `8`: `Under internal review`
+  - `14`: `Final stage of processing - awaiting approval for payment`
+  - `16`: `Approved for payment - payment instruction sent to Custodian`
+  - `18`: `Process completed`
+- **Error Responses:**
+  - `400 Bad Request`: `{ "data": null, "message": "Please provide mobileNumOrPin or rsaPin", "status": 400 }`
+  - `404 Not Found`: `{ "data": null, "message": "No request found for that pin", "status": 404 }`
+  - `500 Internal Server Error`: `{ "data": null, "message": "An error occurred while fetching benefit status.", "status": 500 }`
+
+---
+
 
 ## 5. Standard Error Status Codes
 

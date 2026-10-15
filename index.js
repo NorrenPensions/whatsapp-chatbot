@@ -10,6 +10,8 @@ import officeLocationRoutes from './routes/officeLocation.js';
 import statementRoutes from './routes/statement.js';
 import embassyLetterRoutes from './routes/embassyLetter.js';
 import welcomeLetterRoutes from './routes/welcomeLetter.js';
+import fundPricesRoutes from './routes/fundPrices.js';
+import benefitStatusRoutes from './routes/benefitStatus.js';
 
 const app = express();
 
@@ -31,6 +33,8 @@ app.use('/office-location', officeLocationRoutes);
 app.use('/statement', statementRoutes);
 app.use('/embassy-letter', embassyLetterRoutes);
 app.use('/welcome-letter', welcomeLetterRoutes);
+app.use('/fund-prices', fundPricesRoutes);
+app.use('/benefit-status', benefitStatusRoutes);
 
 const port = process.env.PORT || 2200;
 
