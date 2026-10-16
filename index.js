@@ -12,6 +12,7 @@ import embassyLetterRoutes from './routes/embassyLetter.js';
 import welcomeLetterRoutes from './routes/welcomeLetter.js';
 import fundPricesRoutes from './routes/fundPrices.js';
 import benefitStatusRoutes from './routes/benefitStatus.js';
+import verifyCustomerRoutes from './routes/verifyCustomer.js';
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/embassy-letter', embassyLetterRoutes);
 app.use('/welcome-letter', welcomeLetterRoutes);
 app.use('/fund-prices', fundPricesRoutes);
 app.use('/benefit-status', benefitStatusRoutes);
+app.use('/verify-customer', verifyCustomerRoutes);
 
 const port = process.env.PORT || 2200;
 
