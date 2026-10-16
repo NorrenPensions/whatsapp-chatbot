@@ -13,6 +13,7 @@ import welcomeLetterRoutes from './routes/welcomeLetter.js';
 import fundPricesRoutes from './routes/fundPrices.js';
 import benefitStatusRoutes from './routes/benefitStatus.js';
 import verifyCustomerRoutes from './routes/verifyCustomer.js';
+import apiLogger from './middleware/apiLogger.js';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.set('trust proxy', trustedProxyIps.length ? trustedProxyIps : false);
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(express.json());
+app.use(apiLogger);
 
 // Routes
 app.use('/health', healthRoutes);
