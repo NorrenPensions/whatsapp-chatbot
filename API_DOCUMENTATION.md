@@ -47,6 +47,7 @@ Authorization: Basic <base64-encoded-username:password>
 | `POST` | `/client-details/my-pin` | Yes (Basic) | Retrieve member RSA PIN from mobile number |
 | `POST` | `/client-details/my-email` | Yes (Basic) | Retrieve member registered email |
 | `PUT` | `/client-details/update-email` | Yes (Basic) | Update member registered email |
+| `PUT` | `/client-details/update-phone` | Yes (Basic) | Update member registered mobile number |
 | `POST` | `/client-details/data-recapture-status` | Yes (Basic) | Check NIN/BVN data recapture status |
 | `POST` | `/client-details/embassy-letter-details` | Yes (Basic) | Retrieve embassy letter profile and balance details |
 | `POST` | `/office-location/state` | No | List service center branch offices by state |
@@ -54,7 +55,9 @@ Authorization: Basic <base64-encoded-username:password>
 | `POST` | `/embassy-letter/generate-and-send` | Yes (Basic) | Generate embassy letter PDF and email to member |
 | `POST` | `/welcome-letter/generate` | Yes (Basic) | Generate welcome certificate PDF and email to member |
 | `GET` / `POST` | `/fund-prices` | No | Retrieve list of current fund prices or filter by fund code |
-| `POST` | `/benefit-status` | Yes (Basic) | Retrieve current benefit payment application status |
+| `GET` / `POST` | `/benefit-status` | Yes (Basic) | Retrieve current benefit payment application status |
+| `POST` | `/verify-customer/send-otp` | Yes (Basic) | Send OTP for customer identity verification |
+| `POST` | `/verify-customer/verify-otp` | Yes (Basic) | Verify OTP and retrieve customer details |
 
 ---
 
@@ -137,7 +140,7 @@ POST /balance/growth
 
 ---
 
-### 4.3 Retrieve Member PIN
+### 4.4 Retrieve Member PIN
 
 ```http
 POST /client-details/my-pin
@@ -164,7 +167,7 @@ POST /client-details/my-pin
 
 ---
 
-### 4.4 Retrieve Member Registered Email
+### 4.5 Retrieve Member Registered Email
 
 ```http
 POST /client-details/my-email
@@ -189,7 +192,7 @@ POST /client-details/my-email
 
 ---
 
-### 4.5 Update Registered Email
+### 4.6 Update Registered Email
 
 ```http
 PUT /client-details/update-email
@@ -216,7 +219,34 @@ PUT /client-details/update-email
 
 ---
 
-### 4.6 Check Data Recapture Status
+### 4.7 Update Registered Mobile Number
+
+```http
+PUT /client-details/update-phone
+```
+
+- **Authentication:** Basic Auth
+- **Request Body:**
+  ```json
+  {
+    "mobileNumOrPin": "PEN000000000001",
+    "newMobileNum": "2348012345678"
+  }
+  ```
+- **Response (`200 OK`):**
+  ```json
+  {
+    "message": "Mobile number updated successfully"
+  }
+  ```
+- **Error Responses:**
+  - `400 Bad Request`: `{ "message": "mobileNumOrPin and newMobileNum are required" }`
+  - `404 Not Found`: `{ "message": "The provided RSA PIN does not exist." }`
+  - `500 Internal Server Error`: `{ "message": "An error occurred while updating mobile number" }`
+
+---
+
+### 4.8 Check Data Recapture Status
 
 Checks whether the customer has completed their mandatory NIN/BVN data recapture with the pension administrator.
 
@@ -247,7 +277,7 @@ POST /client-details/data-recapture-status
 
 ---
 
-### 4.7 Retrieve Embassy Letter Details
+### 4.9 Retrieve Embassy Letter Details
 
 Fetches the complete profile and balance summary formatted for visa/embassy verification purposes.
 
@@ -284,7 +314,7 @@ POST /client-details/embassy-letter-details
 
 ---
 
-### 4.8 Service Center Office Locations
+### 4.10 Service Center Office Locations
 
 Find service centers and branch offices located within a specific Nigerian state.
 
@@ -324,7 +354,7 @@ POST /office-location/state
 
 ---
 
-### 4.9 Generate & Send E-Statement of Account
+### 4.11 Generate & Send E-Statement of Account
 
 Generates an official adhoc account statement PDF for the specified date range and delivers it to the customer's registered email address on file.
 
@@ -356,7 +386,7 @@ POST /statement/send-statement
 
 ---
 
-### 4.10 Generate & Send Embassy Confirmation Letter
+### 4.12 Generate & Send Embassy Confirmation Letter
 
 Generates an official embassy letter addressed to the specified diplomatic mission/country confirming retirement savings balance, and emails the PDF.
 
@@ -393,7 +423,7 @@ POST /embassy-letter/generate-and-send
 
 ---
 
-### 4.11 Generate & Send Welcome Letter (Registration Certificate)
+### 4.13 Generate & Send Welcome Letter (Registration Certificate)
 
 Generates the official Welcome Letter & Certificate of Registration PDF with customer photograph and emails it to the registered email address.
 
@@ -426,7 +456,7 @@ POST /welcome-letter/generate
 
 ---
 
-### 4.12 Retrieve Fund Prices
+### 4.14 Retrieve Fund Prices
 
 ```http
 GET /fund-prices
@@ -538,14 +568,17 @@ GET /fund-prices/:fundCode
 - **Error Responses:**
   - `404 Not Found`: `{ "message": "Fund with code 'INVALID' not found." }`
   - `500 Internal Server Error`: `{ "message": "An error occurred while fetching fund prices" }`
+  - `502 Bad Gateway`: `{ "message": "Unexpected response format from partner fund prices service" }`
 
 ---
 
-### 4.13 Retrieve Benefit Application Status
+### 4.15 Retrieve Benefit Application Status
 
 ```http
 POST /benefit-status
 POST /benefit-status/status
+GET /benefit-status
+GET /benefit-status/:pinOrMobile
 ```
 
 - **Authentication:** Basic Auth
@@ -554,13 +587,16 @@ POST /benefit-status/status
   Content-Type: application/json
   Accept: application/json
   ```
-- **Request Body:**
-  ```json
-  {
-    "mobileNumOrPin": "PEN100771157719"
-  }
-  ```
-  *(Also accepts `"rsaPin"` or `"pin"` as payload field, or standard Nigerian mobile number starting with `234`)*
+- **Request Parameters:**
+  - **POST Body:**
+    ```json
+    {
+      "mobileNumOrPin": "PEN100771157719"
+    }
+    ```
+    *(Also accepts `"rsaPin"` or `"pin"` as payload field, or standard Nigerian mobile number starting with `234`)*
+  - **GET Query Parameters:** `?mobileNumOrPin=PEN100771157719` *(also accepts `rsaPin` or `pin`)*
+  - **GET URL Parameter:** `/benefit-status/PEN100771157719`
 - **Response (`200 OK`):**
   ```json
   {
@@ -585,11 +621,102 @@ POST /benefit-status/status
   - `18`: `Process completed`
 - **Error Responses:**
   - `400 Bad Request`: `{ "data": null, "message": "Please provide mobileNumOrPin or rsaPin", "status": 400 }`
-  - `404 Not Found`: `{ "data": null, "message": "No request found for that pin", "status": 404 }`
+  - Not Found *(returned as HTTP `200` with `"status": 404` in response body)*: `{ "data": null, "message": "No request found for that pin", "status": 404 }`
   - `500 Internal Server Error`: `{ "data": null, "message": "An error occurred while fetching benefit status.", "status": 500 }`
 
 ---
 
+
+### 4.16 Send Customer Verification OTP
+
+Initiates customer identity verification by generating a one-time password (OTP) and delivering it via email (preferred) or SMS (fallback). A 60-second cooldown is enforced between OTP requests.
+
+```http
+POST /verify-customer/send-otp
+```
+
+- **Authentication:** Basic Auth
+- **Request Body:**
+  ```json
+  {
+    "mobileNumOrPin": "PEN000000000001"
+  }
+  ```
+- **Response (`200 OK`) — Email delivery:**
+  ```json
+  {
+    "message": "OTP successfully sent to your email.",
+    "channel": "email",
+    "status": 200
+  }
+  ```
+- **Response (`200 OK`) — SMS fallback:**
+  ```json
+  {
+    "message": "OTP successfully sent via SMS.",
+    "channel": "sms",
+    "status": 200
+  }
+  ```
+- **Error Responses:**
+  - `200 OK` *(Rate limited — OTP recently issued)*:
+    ```json
+    { "message": "An OTP was recently generated. Please wait 60 seconds before requesting another.", "status": 429 }
+    ```
+  - `200 OK` *(Invalid user)*:
+    ```json
+    { "message": "Invalid user or incorrect RSA pin." }
+    ```
+  - `400 Bad Request`: `{ "message": "We do not have a valid email or mobile phone number on your record. Kindly complete an update form with Norrenberger Pensions.", "status": 400 }`
+  - `500 Internal Server Error`: `{ "message": "An error occurred while processing OTP request." }`
+
+---
+
+### 4.17 Verify Customer OTP
+
+Validates a previously issued OTP. On success, returns the verified customer's profile details. OTPs expire after 10 minutes and are single-use.
+
+```http
+POST /verify-customer/verify-otp
+```
+
+- **Authentication:** Basic Auth
+- **Request Body:**
+  ```json
+  {
+    "mobileNumOrPin": "PEN000000000001",
+    "otp": 234567
+  }
+  ```
+- **Response (`200 OK`) — Verification successful:**
+  ```json
+  {
+    "details": {
+      "rsaPin": "PEN000000000001",
+      "email": "customer@example.com",
+      "surname": "DOE",
+      "firstname": "JOHN",
+      "othername": "ALEX",
+      "phone": "08012345678"
+    },
+    "message": "Correct OTP submitted.",
+    "status": 200
+  }
+  ```
+- **Error Responses:**
+  - `200 OK` *(Invalid or expired OTP)*:
+    ```json
+    { "message": "Invalid OTP or request not found.", "status": 400 }
+    ```
+    ```json
+    { "message": "OTP has expired. Please request a new one.", "status": 400 }
+    ```
+    ```json
+    { "message": "Incorrect OTP", "status": 400 }
+    ```
+  - `404 Not Found`: `{ "message": "Employee record not found.", "status": 404 }`
+
+---
 
 ## 5. Standard Error Status Codes
 

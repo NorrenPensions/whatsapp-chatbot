@@ -176,7 +176,7 @@ router.post('/verify-otp', async (req, res) => {
                 WHERE rsa_pin = @pin OR mobile_phone = @pin`)
 
     if (!savedOtpRes.recordset || savedOtpRes.recordset.length === 0) {
-        return res.json({ message: "Invalid OTP or request not found.", status: 400 });
+        return res.status(400).json({ message: "Invalid OTP or request not found.", status: 400 });
     }
 
     const { savedOtp, rsaPin, otp_createdAt } = savedOtpRes.recordset[0];
@@ -194,7 +194,7 @@ router.post('/verify-otp', async (req, res) => {
                     UPDATE BenefitTracker_v2.dbo.Clients
                         SET otp = NULL, otp_createdAt = NULL
                         WHERE rsa_pin = @pin`);
-            return res.json({ message: "OTP has expired. Please request a new one.", status: 400 });
+            return res.status(400).json({ message: "OTP has expired. Please request a new one.", status: 400 });
         }
 
         await poolB.request()
@@ -235,7 +235,7 @@ router.post('/verify-otp', async (req, res) => {
         return res.status(404).json({ message: "Employee record not found.", status: 404 });
 
     } else {
-        return res.json({ message: "Incorrect OTP", status: 400 });
+        return res.status(400).json({ message: "Incorrect OTP", status: 400 });
     }
 
 });
